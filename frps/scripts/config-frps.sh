@@ -6,9 +6,28 @@ NAME=frps
 BIN=/koolshare/bin/${NAME}
 INI_FILE=/koolshare/configs/${NAME}.ini
 PID_FILE=/var/run/${NAME}.pid
+alias echo_date='echo $(date +%Y年%m月%d日\ %X):'
 en=${frps_enable}
 
+fun_ntp_sync(){
+    ntp_server=`nvram get ntp_server0`
+    start_time="`date +%Y%m%d`"
+    ntpclient -h ${ntp_server} -i3 -l -s > /dev/null 2>&1
+    if [ "${start_time}"x = "`date +%Y%m%d`"x ]; then  
+        ntpclient -h ntp1.aliyun.com -i3 -l -s > /dev/null 2>&1 
+    fi
+}
+fun_nat_start(){
+    if [ "${frps_enable}"x = "1"x ];then
+        echo_date 添加nat-start触发事件...
+        dbus set __event__onnatstart_frps="/koolshare/scripts/config-frps.sh"
+    else
+        echo_date 删除nat-start触发...
+        dbus remove __event__onnatstart_frps
+    fi
+}
 onstart() {
+fun_ntp_sync
 killall ${NAME} || true >/dev/null 2>&1
 dbus set ${NAME}_client_version=`${BIN} --version`
 
@@ -62,6 +81,7 @@ echo -n "starting ${NAME}..."
 export GOGC=40
 start-stop-daemon -S -q -b -m -p ${PID_FILE} -x ${BIN} -- -c ${INI_FILE}
 echo " done"
+fun_nat_start
 else
 	stop
 fi
@@ -70,6 +90,7 @@ stop() {
 	echo -n "stop ${NAME}..."
 	killall frps || true
 	cru d frps_monitor
+    fun_nat_start
 	echo " done"
 }
 
@@ -78,8 +99,6 @@ start)
     if [[ "$en" == "1" ]]; then
         logger "[软件中心]: 启动frps！"
         onstart
-    else
-        logger "[软件中心]: frps未设置开机启动，跳过！"
     fi
     ;;
 stop)

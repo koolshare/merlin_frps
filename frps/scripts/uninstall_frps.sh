@@ -20,5 +20,6 @@ do
 dbus remove $value 
 done
 dbus remove __event__onwanstart_${MODULE}
+dbus remove __event__onnatstart_${MODULE}
 cru d ${MODULE}_monitor
 rm -f /koolshare/scripts/uninstall_${MODULE}.sh
