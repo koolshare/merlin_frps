@@ -1,7 +1,7 @@
 #!/bin/sh
 
 MODULE=frps
-VERSION="1.4.14"
+VERSION="1.4.15"
 cd /
 rm -f /koolshare/init.d/S97frps.sh
 cp -f /tmp/$MODULE/bin/* /koolshare/bin/

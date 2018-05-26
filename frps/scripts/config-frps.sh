@@ -13,8 +13,8 @@ fun_ntp_sync(){
     ntp_server=`nvram get ntp_server0`
     start_time="`date +%Y%m%d`"
     ntpclient -h ${ntp_server} -i3 -l -s > /dev/null 2>&1
-    if [ "${start_time}"x = "`date +%Y%m%d`"x ]; then  
-        ntpclient -h ntp1.aliyun.com -i3 -l -s > /dev/null 2>&1 
+    if [ "${start_time}"x = "`date +%Y%m%d`"x ]; then
+        ntpclient -h ntp1.aliyun.com -i3 -l -s > /dev/null 2>&1
     fi
 }
 fun_nat_start(){
@@ -55,10 +55,9 @@ log_file = ${frps_common_log_file}
 log_level = ${frps_common_log_level}
 log_max_days = ${frps_common_log_max_days}
 # if you enable privilege mode, frpc can create a proxy without pre-configure in frps when privilege_token is correct
-privilege_mode = true
-privilege_token = ${frps_common_privilege_token}
+token = ${frps_common_privilege_token}
 # only allow frpc to bind ports you list, if you set nothing, there won't be any limit
-#privilege_allow_ports = 1-65535
+#allow_ports = 1-65535
 # pool_count in each proxy will change to max_pool_count if they exceed the maximum value
 max_pool_count = ${frps_common_max_pool_count}
 tcp_mux = ${frps_common_tcp_mux}
@@ -107,4 +106,4 @@ stop)
 *)
 	onstart
 	;;
-esac  
+esac
