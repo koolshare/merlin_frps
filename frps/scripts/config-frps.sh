@@ -36,7 +36,7 @@ cat > ${INI_FILE}<<-EOF
 [common]
 # A literal address or host name for IPv6 must be enclosed
 # in square brackets, as in "[::1]:80", "[ipv6-host]:http" or "[ipv6-host%zone]:80"
-bind_addr = 0.0.0.0
+bind_addr = [::]
 bind_port = ${frps_common_bind_port}
 # udp port used for kcp protocol, it can be same with 'bind_port'
 # if not set, kcp is disabled in frps
